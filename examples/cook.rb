@@ -9,3 +9,6 @@ require File.dirname(File.expand_path(__FILE__)) + "/steps/scrambled_eggs"
 
 p = Yawl::Process.create(:desired_state => "scrambled_eggs")
 p.start
+
+p = Yawl::Process.create(:desired_state => "breakfast")
+p.start
