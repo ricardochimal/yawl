@@ -43,11 +43,11 @@ module Yawl
 
 
     def create!
-      migration.apply(db, :up)
+      MIGRATION.apply(db, :up)
     end
 
     def destroy!
-      migration.apply(db, :down)
+      MIGRATION.apply(db, :down)
     end
 
     def db
