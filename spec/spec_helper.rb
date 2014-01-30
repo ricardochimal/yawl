@@ -16,7 +16,7 @@ def QC.jobs
   s = "SELECT * FROM queue_classic_jobs"
   [QC::Conn.execute(s)].compact.flatten.
     map {|j| j.reject {|k, v| !%w[q_name method args].include?(k) } }.
-    map {|j| j.merge("args" => MultiJson.load(j["args"])) }.
+    map {|j| j.merge("args" => JSON.parse(j["args"])) }.
     map {|j| j.reject {|k, v| k == "args" && v.empty? } }
 end
 
@@ -24,7 +24,7 @@ def QC.later_jobs
   s = "SELECT * FROM queue_classic_later_jobs"
   [QC::Conn.execute(s)].compact.flatten.
     map {|j| j.reject {|k, v| !%w[q_name method args].include?(k) } }.
-    map {|j| j.merge("args" => MultiJson.load(j["args"])) }.
+    map {|j| j.merge("args" => JSON.parse(j["args"])) }.
     map {|j| j.reject {|k, v| k == "args" && v.empty? } }
 end
 
