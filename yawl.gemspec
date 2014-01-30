@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sequel"
   spec.add_dependency "scrolls"
   spec.add_dependency "queue_classic"
-  spec.add_dependency "queue_classic-later"
+  spec.add_dependency "queue_classic-later", ">= 0.3.0"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
