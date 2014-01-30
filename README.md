@@ -43,7 +43,7 @@ The way you go about using it is:
 3. You call the process with the name you defined in step 2, and add any variables that you need to the `Yawl::Process#config` json field.
 
   ```ruby
-  p = Yawl::Process.create(:desired_state => "wake_up")
+  p = Yawl::Process.create(:desired_state => "wake_up", :config => {})
   p.start
   ```
 
