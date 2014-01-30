@@ -15,7 +15,7 @@ module Yawl
     class RequestIdAttributeMismatch < RuntimeError; end
 
     def self.log(data, &block)
-      Log.log({ ns: "process" }.merge(data), &block)
+      Log.log({ ns: "yawl-process" }.merge(data), &block)
     end
 
     def log(data, &block)

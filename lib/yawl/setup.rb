@@ -1,5 +1,7 @@
 require 'sequel'
 
+require 'yawl/db'
+
 Sequel.extension :migration
 
 module Yawl
@@ -41,17 +43,27 @@ module Yawl
       end
     end
 
-
     def create!
-      MIGRATION.apply(db, :up)
+      MIGRATION.apply(DB, :up)
     end
 
     def destroy!
-      MIGRATION.apply(db, :down)
+      MIGRATION.apply(DB, :down)
     end
 
-    def db
-      Sequel.connect(ENV["DATABASE_URL"])
+    def create_for_test!
+      if DB.tables.include?(:processes)
+        destroy!
+      end
+      create!
+
+      require "queue_classic"
+      QC::Setup.drop
+      QC::Setup.create
+
+      require "queue_classic/later"
+      QC::Later::Setup.drop
+      QC::Later::Setup.create
     end
   end
 end

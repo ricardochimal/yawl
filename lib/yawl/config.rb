@@ -2,12 +2,8 @@ module Yawl
   module Config
     extend self
 
-    attr_writer :app
+    attr_accessor :app
     attr_accessor :deploy
-
-    def app
-      @app || "yawl"
-    end
 
     def log_quiet?
       env("LOG_QUIET") == "1"

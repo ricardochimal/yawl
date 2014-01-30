@@ -7,6 +7,8 @@ end
 require "yawl/config"
 require "yawl/log"
 
+require "yawl/db"
+
 require "yawl/process"
 require "yawl/process_definitions"
 require "yawl/step"

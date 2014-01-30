@@ -10,7 +10,12 @@ module Yawl
     end
 
     def log_measure(data)
-      measure_base = "#{Config.app}.#{data[:ns]}.#{data[:fn]}"
+      if Config.app
+        measure_base = "#{Config.app}.#{data[:ns]}.#{data[:fn]}"
+      else
+        measure_base = "#{data[:ns]}.#{data[:fn]}"
+      end
+
       begin
         t0 = Time.now
         log(data.merge(at: "start"))
@@ -28,7 +33,8 @@ module Yawl
       if Config.log_quiet?
         block.call if block
       else
-        params = { app: Config.app }
+        params = { }
+        params[:app] = Config.app if Config.app
         params[:source] = Config.deploy if Config.deploy
         Scrolls.log(params.merge(data), &block)
       end

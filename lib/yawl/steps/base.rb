@@ -115,7 +115,7 @@ module Yawl
       end
 
       def log(data, &block)
-        Log.log({ ns: "step_#{name}" }.merge(data), &block)
+        Log.log({ ns: "yawl-step_#{name}" }.merge(data), &block)
       end
     end
 

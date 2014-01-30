@@ -22,7 +22,7 @@ module Yawl
     end
 
     def self.log(data, &block)
-      Log.log({ ns: "step" }.merge(data), &block)
+      Log.log({ ns: "yawl-step" }.merge(data), &block)
     end
 
     def log(data, &block)
