@@ -5,9 +5,6 @@ require "yawl/log"
 
 module Yawl
   class Process < Sequel::Model
-    plugin :serialization, :json, :config
-    plugin :serialization_modification_detection
-
     plugin :validation_helpers
     one_to_many :steps, :order => [:seq]
 
