@@ -16,7 +16,7 @@ module Yawl
           String :state, :default=>"pending", :text=>true, :null=>false
           DateTime :created_at
           String :name, :text=>true
-          String :config
+          json :config
           String :request_id, :text=>true
           String :specified_attributes
         end
