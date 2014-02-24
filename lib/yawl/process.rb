@@ -54,7 +54,15 @@ module Yawl
       !%w[completed failed].include?(state)
     end
 
+    def object
+      return unless values[:object_id] && object_type
+
+      klass = Object.const_get(object_type)
+      klass[ values[:object_id] ]
+    end
+
     def current?
+      self.id == self.class.filter(:object_type => object_type, :object_id => values[:object_id]).order(:id).reverse.get(:id)
     end
 
     def start_first_unfinished_step_or_complete

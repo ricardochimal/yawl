@@ -18,7 +18,8 @@ module Yawl
           String :name, :text=>true
           json :config
           String :request_id, :text=>true
-          String :specified_attributes
+          String :object_type
+          Integer :object_id
         end
 
         create_table(:steps) do
