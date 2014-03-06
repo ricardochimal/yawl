@@ -57,7 +57,7 @@ module Yawl
     def object
       return unless values[:object_id] && object_type
 
-      klass = Object.const_get(object_type)
+      klass = Utils.constantize(object_type)
       klass[ values[:object_id] ]
     end
 

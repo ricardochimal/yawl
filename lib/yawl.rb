@@ -4,6 +4,7 @@ module Yawl
   # Your code goes here...
 end
 
+require "yawl/utils"
 require "yawl/config"
 require "yawl/log"
 
