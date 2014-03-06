@@ -1,5 +1,4 @@
 require "stringio"
-require "forwardable"
 
 module Yawl
   module Steps
@@ -59,8 +58,6 @@ module Yawl
     end
 
     class Base
-      extend Forwardable
-
       def self.all_steps
         @all_steps ||= {}
       end
