@@ -325,7 +325,7 @@ describe Yawl::Step do
       it "captures output" do
         step.execute
 
-        step.attempts.first.output.should =~ /\AI started\n\n\n---\nCAUGHT ERROR: Step slept\n.*:in `.*'/ # backtrace
+        step.attempts.first.output.should =~ /\AI started\n\n\n---\nStep slept\n\Z/
       end
     end
 
@@ -361,7 +361,7 @@ describe Yawl::Step do
       it "captures output" do
         expect { step.execute }.to raise_error
 
-        step.attempts.first.output.should =~ /\AI started\n\n\n---\nCAUGHT ERROR: Step slept\n.*:in `.*'/ # backtrace
+        step.attempts.first.output.should =~ /\AI started\n\n\n---\nStep slept\n\Z/
       end
     end
   end

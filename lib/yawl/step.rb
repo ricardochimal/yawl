@@ -79,22 +79,30 @@ module Yawl
           attempt.update(:output => real_step.output, :completed_at => Time.now)
           update(:state => "completed")
           process.step_finished
-        rescue Step::Fatal, Step::Tired, StandardError, SignalException => e
-          log(:fn => "execute", :at => "caught_exception", :class => e.class, :message => e.message)
-          attempt.update(:output => "#{real_step.output}\n\n---\nCAUGHT ERROR: #{e}\n#{e.backtrace.join("\n")}\n", :completed_at => Time.now)
 
-          if out_of_attempts? || e.is_a?(Step::Fatal)
-            update(:state => "failed")
-            process.step_failed
-            raise
-          elsif SignalException === e && e.signm == "SIGTERM" # we are shutting down
-            update(:state => "interrupted")
-            raise
-          else
-            update(:state => "pending")
-            start_after_delay
-          end
+        rescue Step::Tired => e
+          log(:fn => "execute", :at => "sleep")
+          attempt.update(:output => "#{real_step.output}\n\n---\n#{e}\n", :completed_at => Time.now)
+          handle_error(e)
+        rescue Step::Fatal, StandardError, SignalException => e
+          attempt.update(:output => "#{real_step.output}\n\n---\nCAUGHT ERROR: #{e}\n#{e.backtrace.join("\n")}\n", :completed_at => Time.now)
+          log(:fn => "execute", :at => "caught_exception", :class => e.class, :message => e.message)
+          handle_error(e)
         end
+      end
+    end
+
+    def handle_error(e)
+      if out_of_attempts? || e.is_a?(Step::Fatal)
+        update(:state => "failed")
+        process.step_failed
+        raise
+      elsif SignalException === e && e.signm == "SIGTERM" # we are shutting down
+        update(:state => "interrupted")
+        raise
+      else
+        update(:state => "pending")
+        start_after_delay
       end
     end
 
