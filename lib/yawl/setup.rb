@@ -20,6 +20,8 @@ module Yawl
           String :request_id, :text=>true
           String :object_type
           Integer :object_id
+
+          index [:name], :unique => true
         end
 
         create_table(:steps) do
