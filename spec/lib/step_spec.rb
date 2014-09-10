@@ -92,7 +92,7 @@ describe Yawl::Step do
     it "executes a single step by id" do
       Yawl::Step.execute(step.id)
 
-      step.reload.state.should == "completed"
+      expect(step.reload.state).to eq("completed")
     end
   end
 
@@ -106,7 +106,7 @@ describe Yawl::Step do
 
       Yawl::Step.restart_interrupted
 
-      step.should be_queued_for_now
+      expect(step).to be_queued_for_now
     end
   end
 
@@ -118,7 +118,7 @@ describe Yawl::Step do
     it "enqueues the step for immediate execution" do
       step.start
 
-      step.should be_queued_for_now
+      expect(step).to be_queued_for_now
     end
 
     it "resets state to pending" do
@@ -126,7 +126,7 @@ describe Yawl::Step do
 
       step.start
 
-      step.state.should == "pending"
+      expect(step.state).to eq("pending")
     end
   end
 
@@ -138,11 +138,11 @@ describe Yawl::Step do
     it "sets state to completed" do
       step.execute
 
-      step.state.should == "completed"
+      expect(step.state).to eq("completed")
     end
 
     it "notifies the process of completion" do
-      step.process.should_receive(:step_finished)
+      expect(step.process).to receive(:step_finished)
 
       step.execute
     end
@@ -150,7 +150,7 @@ describe Yawl::Step do
     it "captures output" do
       step.execute
 
-      step.attempts.first.output.should == "I worked\n"
+      expect(step.attempts.first.output).to eq("I worked\n")
     end
   end
 
@@ -163,11 +163,11 @@ describe Yawl::Step do
       it "sets state to pending" do
         step.execute
 
-        step.state.should == "pending"
+        expect(step.state).to eq("pending")
       end
 
       it "does not notify the process of failure" do
-        step.process.should_not_receive(:step_failed)
+        expect(step.process).not_to receive(:step_failed)
 
         step.execute
       end
@@ -175,13 +175,13 @@ describe Yawl::Step do
       it "is queued for retry" do
         step.execute
 
-        step.should be_queued_for_later
+        expect(step).to be_queued_for_later
       end
 
       it "captures output" do
         step.execute
 
-        step.attempts.first.output.should =~ /\AI started\n\n\n---\nCAUGHT ERROR: I failed\n.*:in `.*'/ # backtrace
+        expect(step.attempts.first.output).to match(/\AI started\n\n\n---\nCAUGHT ERROR: I failed\n.*:in `.*'/) # backtrace
       end
     end
 
@@ -196,11 +196,11 @@ describe Yawl::Step do
             step.execute
           }.to raise_error(Yawl::Step::Fatal)
 
-          step.state.should == "failed"
+          expect(step.state).to eq("failed")
         end
 
         it "does not notify the process of failure" do
-          step.process.should_receive(:step_failed)
+          expect(step.process).to receive(:step_failed)
 
           expect {
             step.execute
@@ -212,7 +212,7 @@ describe Yawl::Step do
             step.execute
           }.to raise_error(Yawl::Step::Fatal)
 
-          step.should_not be_queued_for_later
+          expect(step).not_to be_queued_for_later
         end
 
         it "captures output" do
@@ -220,7 +220,7 @@ describe Yawl::Step do
             step.execute
           }.to raise_error(Yawl::Step::Fatal)
 
-          step.attempts.first.output.should =~ /\AI started\n\n\n---\nCAUGHT ERROR: Fatal error in step\n.*:in `.*'/ # backtrace
+          expect(step.attempts.first.output).to match(/\AI started\n\n\n---\nCAUGHT ERROR: Fatal error in step\n.*:in `.*'/) # backtrace
         end
       end
     end
@@ -239,11 +239,11 @@ describe Yawl::Step do
       it "sets state to failed" do
         expect { step.execute }.to raise_error
 
-        step.state.should == "failed"
+        expect(step.state).to eq("failed")
       end
 
       it "notifies the process of failure" do
-        step.process.should_receive(:step_failed)
+        expect(step.process).to receive(:step_failed)
 
         expect { step.execute }.to raise_error
       end
@@ -251,13 +251,13 @@ describe Yawl::Step do
       it "is not queued for retry" do
         expect { step.execute }.to raise_error
 
-        step.should_not be_queued_for_later
+        expect(step).not_to be_queued_for_later
       end
 
       it "captures output" do
         expect { step.execute }.to raise_error
 
-        step.attempts.first.output.should =~ /\AI started\n\n\n---\nCAUGHT ERROR: I failed\n.*:in `.*'/
+        expect(step.attempts.first.output).to match(/\AI started\n\n\n---\nCAUGHT ERROR: I failed\n.*:in `.*'/)
       end
     end
 
@@ -275,11 +275,11 @@ describe Yawl::Step do
       it "sets state to interrupted" do
         expect { step.execute }.to raise_error
 
-        step.state.should == "interrupted"
+        expect(step.state).to eq("interrupted")
       end
 
       it "does not notify the process of failure" do
-        step.process.should_not_receive(:step_failed)
+        expect(step.process).not_to receive(:step_failed)
 
         expect { step.execute }.to raise_error
       end
@@ -287,13 +287,13 @@ describe Yawl::Step do
       it "is not queued for retry" do
         expect { step.execute }.to raise_error
 
-        step.should_not be_queued_for_later
+        expect(step).not_to be_queued_for_later
       end
 
       it "captures output" do
         expect { step.execute }.to raise_error
 
-        step.attempts.first.output.should =~ /\AI started\n\n\n---\nCAUGHT ERROR: SIGTERM\n.*:in `.*'/ # backtrace
+        expect(step.attempts.first.output).to match(/\AI started\n\n\n---\nCAUGHT ERROR: SIGTERM\n.*:in `.*'/) # backtrace
       end
     end
   end
@@ -307,11 +307,11 @@ describe Yawl::Step do
       it "sets state to pending" do
         step.execute
 
-        step.state.should == "pending"
+        expect(step.state).to eq("pending")
       end
 
       it "does not notify the process of failure" do
-        step.process.should_not_receive(:step_failed)
+        expect(step.process).not_to receive(:step_failed)
 
         step.execute
       end
@@ -319,13 +319,13 @@ describe Yawl::Step do
       it "is queued for retry" do
         step.execute
 
-        step.should be_queued_for_later
+        expect(step).to be_queued_for_later
       end
 
       it "captures output" do
         step.execute
 
-        step.attempts.first.output.should =~ /\AI started\n\n\n---\nStep slept\n\Z/
+        expect(step.attempts.first.output).to match(/\AI started\n\n\n---\nStep slept\n\Z/)
       end
     end
 
@@ -343,11 +343,11 @@ describe Yawl::Step do
       it "sets state to failed" do
         expect { step.execute }.to raise_error
 
-        step.state.should == "failed"
+        expect(step.state).to eq("failed")
       end
 
       it "notifies the process of failure" do
-        step.process.should_receive(:step_failed)
+        expect(step.process).to receive(:step_failed)
 
         expect { step.execute }.to raise_error
       end
@@ -355,13 +355,13 @@ describe Yawl::Step do
       it "is not queued for retry" do
         expect { step.execute }.to raise_error
 
-        step.should_not be_queued_for_later
+        expect(step).not_to be_queued_for_later
       end
 
       it "captures output" do
         expect { step.execute }.to raise_error
 
-        step.attempts.first.output.should =~ /\AI started\n\n\n---\nStep slept\n\Z/
+        expect(step.attempts.first.output).to match(/\AI started\n\n\n---\nStep slept\n\Z/)
       end
     end
   end
