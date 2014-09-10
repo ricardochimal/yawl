@@ -60,12 +60,21 @@ module Yawl
       end
       create!
 
-      require "queue_classic"
-      QC::Setup.drop
-      QC::Setup.create
+      drop_queue_classic
+      create_queue_classic
+    end
 
+    def drop_queue_classic
+      require "queue_classic"
       require "queue_classic/later"
+      QC::Setup.drop
       QC::Later::Setup.drop
+    end
+
+    def create_queue_classic
+      require "queue_classic"
+      require "queue_classic/later"
+      QC::Setup.create
       QC::Later::Setup.create
     end
   end

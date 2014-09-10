@@ -1,7 +1,7 @@
 if ENV["CI"]
   raise "ENV[DATABASE_URL] not set" unless ENV["DATABASE_URL"]
 else
-  ENV["DATABASE_URL"] = "postgres://localhost/yawl-test"
+  ENV["DATABASE_URL"] = "postgres://localhost/yawl_test"
 end
 ENV["LOG_QUIET"] ||= "1"
 
