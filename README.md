@@ -50,7 +50,7 @@ The way you go about using it is:
 ## Running the Example
 
 ```
-bundle exec sequel -m migrations/ postgres://localhost/yawl_examples
+RACK_ENV=examples be rake db:reset db:setup
 bundle exec ruby examples/cook_worker.rb &
 bundle exec ruby examples/cook.rb
 ```
