@@ -101,7 +101,7 @@ module Yawl
     end
 
     def unfinished_steps
-      steps_dataset.where("state != 'completed'")
+      steps_dataset.where(Sequel.lit("state != 'completed'"))
     end
 
     def end_state_reached
