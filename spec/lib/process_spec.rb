@@ -13,10 +13,10 @@ describe Yawl::Process do
 
     @process = Yawl::Process.create(:object_type => "FakeObject", :object_id => 123, :desired_state => "tested")
     @fake_object = FakeObject.new
-    FakeObject.stub(:[]).with(123) { @fake_object }
+    allow(FakeObject).to receive(:[]).with(123) { @fake_object }
   end
 
   it "loads object" do
-    @process.object.should == @fake_object
+    expect(@process.object).to eq(@fake_object)
   end
 end

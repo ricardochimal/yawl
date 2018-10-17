@@ -12,6 +12,8 @@ require "yawl/setup"
 
 Yawl::Setup.create_for_test!
 
+RSpec::Expectations.configuration.on_potential_false_positives = :nothing
+
 def QC.jobs
   s = "SELECT * FROM queue_classic_jobs"
   [QC::Conn.execute(s)].compact.flatten.
@@ -46,11 +48,11 @@ RSpec::Matchers.define :be_queued_for_later do
     QC.later_jobs.include?("q_name" => "default", "method" => "Yawl::Step.execute", "args" => [step.id])
   end
 
-  failure_message_for_should do |step|
+  failure_message do |step|
     "expected #{step.inspect} to be queued for later in later jobs #{QC.later_jobs}"
   end
 
-  failure_message_for_should_not do |step|
+  failure_message_when_negated do |step|
     "expected #{step.inspect} to not be queued for later in later jobs #{QC.later_jobs}"
   end
 end
@@ -60,11 +62,11 @@ RSpec::Matchers.define :be_queued_for_now do
     QC.jobs.include?("q_name" => "default", "method" => "Yawl::Step.execute", "args" => [step.id])
   end
 
-  failure_message_for_should do |step|
+  failure_message do |step|
     "expected #{step.inspect} to be queued for now in jobs #{QC.jobs}"
   end
 
-  failure_message_for_should_not do |step|
+  failure_message_when_negated do |step|
     "expected #{step.inspect} to not be queued for now in jobs #{QC.jobs}"
   end
 end
